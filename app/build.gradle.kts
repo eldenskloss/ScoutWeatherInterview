@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.ktlint)
 }
 
 android {
@@ -61,4 +62,17 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+}
+
+// Copies tracked pre-commit hook in scripts to untracked directory .git/hooks
+tasks.register<Copy>("copyPreCommitHook") {
+    description = "Copy pre-commit git hook from the scripts to the .git/hooks folder."
+    group = "git hooks"
+    outputs.upToDateWhen { false }
+    from("$rootDir/scripts/pre-commit")
+    into("$rootDir/.git/hooks/")
+}
+
+tasks.build {
+    dependsOn("copyPreCommitHook")
 }
