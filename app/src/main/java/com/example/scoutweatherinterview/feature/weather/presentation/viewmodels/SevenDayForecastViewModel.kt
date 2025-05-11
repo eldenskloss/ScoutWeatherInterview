@@ -3,8 +3,10 @@ package com.example.scoutweatherinterview.feature.weather.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scoutweatherinterview.core.CommonUIState
+import com.example.scoutweatherinterview.core.LocationResult
 import com.example.scoutweatherinterview.feature.weather.domain.FetchForecastUseCase
 import com.example.scoutweatherinterview.feature.weather.domain.model.Forecast
+import com.example.scoutweatherinterview.feature.weather.domain.repository.LocationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,14 +14,28 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-open class SevenDayForecastViewModel @Inject constructor(private val fetchForecast: FetchForecastUseCase) : ViewModel() {
-    private val _uiState = MutableStateFlow<CommonUIState<Forecast>?>(null)
+open class SevenDayForecastViewModel @Inject constructor(
+    private val fetchForecast: FetchForecastUseCase,
+    private val locationRepository: LocationRepository
+) : ViewModel() {
+    private val _uiState = MutableStateFlow<CommonUIState<Forecast>>(CommonUIState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    init {
+    // TODO: Clean this up, use transform instead
+    fun fetchWeatherFromLocation() {
         viewModelScope.launch {
-            fetchForecast.fetchForecast().collect { state ->
-                _uiState.value = state
+            when (val locationResult = locationRepository.getUsersLocation()) {
+                LocationResult.Error -> {
+                    _uiState.value = CommonUIState.Error("Unable to retrieve location")
+                }
+                LocationResult.MissingPermission -> {
+                    // Ask for permission
+                }
+                is LocationResult.Success -> {
+                    fetchForecast.fetchForecast(locationResult.location.lat, locationResult.location.long).collect { state ->
+                        _uiState.value = state
+                    }
+                }
             }
         }
     }

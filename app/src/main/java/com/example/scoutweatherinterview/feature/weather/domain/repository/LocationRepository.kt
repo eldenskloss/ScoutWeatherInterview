@@ -1,7 +1,7 @@
 package com.example.scoutweatherinterview.feature.weather.domain.repository
 
-import com.example.scoutweatherinterview.feature.weather.domain.model.CurrentLocation
+import com.example.scoutweatherinterview.core.LocationResult
 
 interface LocationRepository {
-    fun getUsersLocation(): CurrentLocation
+    suspend fun getUsersLocation(): LocationResult
 }

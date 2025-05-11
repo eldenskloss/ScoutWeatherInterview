@@ -1,5 +1,7 @@
 package com.example.scoutweatherinterview.feature.weather.presentation
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +18,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -25,15 +29,35 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scoutweatherinterview.core.CommonUIState
 import com.example.scoutweatherinterview.feature.weather.domain.model.Forecast
 import com.example.scoutweatherinterview.feature.weather.presentation.viewmodels.SevenDayForecastViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SevenDayForecastScreen(
     viewModel: SevenDayForecastViewModel = hiltViewModel<SevenDayForecastViewModel>(),
     onNavigate: (forecastID: String) -> Unit
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value ?: run { return }
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val locationPermissionState = rememberMultiplePermissionsState(
+        listOf(
+            ACCESS_FINE_LOCATION,
+            ACCESS_COARSE_LOCATION
+        )
+    )
+    LaunchedEffect(locationPermissionState) {
+        snapshotFlow { locationPermissionState.allPermissionsGranted }.collect {
+            if (it) {
+                viewModel.fetchWeatherFromLocation()
+            } else {
+                // TODO: Show user Location is required, try again screen
+                locationPermissionState.launchMultiplePermissionRequest()
+            }
+        }
+    }
+
     Scaffold { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             when (uiState) {

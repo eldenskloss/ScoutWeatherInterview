@@ -1,5 +1,6 @@
 package com.example.scoutweatherinterview.core.di
 
+import android.app.Application
 import com.example.scoutweatherinterview.core.Constants.WEATHER_API_BASE_URL
 import com.example.scoutweatherinterview.feature.weather.data.repository.FetchForecastApi
 import com.example.scoutweatherinterview.feature.weather.data.repository.FetchForecastRepositoryImpl
@@ -36,7 +37,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesLocationRepository(): LocationRepository {
-        return LocationRepositoryImpl()
+    fun providesLocationRepository(application: Application): LocationRepository {
+        return LocationRepositoryImpl(application)
     }
 }
