@@ -7,5 +7,5 @@ interface Screens {
     data object SevenDayForecast : Screens
 
     @Serializable
-    data class ForecastDetailScreen(val forecastID: String) : Screens
+    data class ForecastDetailScreen(val forecastDate: String) : Screens
 }

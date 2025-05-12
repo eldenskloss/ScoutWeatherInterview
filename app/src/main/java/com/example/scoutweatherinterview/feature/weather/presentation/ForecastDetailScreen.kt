@@ -10,18 +10,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.scoutweatherinterview.ui.theme.ScoutWeatherInterviewTheme
 
 @Composable
-fun ForecastDetailScreen() {
+fun ForecastDetailScreen(forecastDate: String) {
     Scaffold { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            Text("Forecast Detail Screen")
+            Text("Forecast Detail Screen $forecastDate")
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ForecastDetailScreenPreview() {
-    ScoutWeatherInterviewTheme {
-        ForecastDetailScreen()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun ForecastDetailScreenPreview() {
+//    ScoutWeatherInterviewTheme {
+//        ForecastDetailScreen()
+//    }
+//}

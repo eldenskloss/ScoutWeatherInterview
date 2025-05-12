@@ -45,6 +45,7 @@ fun ForecastResponseDTO.toForecast(): Forecast {
         }
 
         ForecastItem(
+            date = it.date,
             day = getDayOfWeek(it.date),
             temperaturesInFahrenheit = Temperatures(
                 averageTemperature = dayDTO.avgtemp_f.toString(),

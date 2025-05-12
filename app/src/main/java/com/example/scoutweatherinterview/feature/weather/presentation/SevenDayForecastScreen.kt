@@ -47,7 +47,7 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun SevenDayForecastScreen(
     viewModel: SevenDayForecastViewModel = hiltViewModel<SevenDayForecastViewModel>(),
-    onNavigate: (forecastID: String) -> Unit
+    onNavigate: (forecastDate: String) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val locationPermissionState = rememberMultiplePermissionsState(
@@ -114,7 +114,7 @@ fun ForecastContent(
     modifier: Modifier = Modifier,
     forecast: Forecast,
     shouldShowInFahrenheit: Boolean = true,
-    onNavigate: (forecastID: String) -> Unit
+    onNavigate: (forecastDate: String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -134,7 +134,7 @@ fun ForecastContent(
                 Column(
                     modifier = Modifier
                         .padding(16.dp)
-                        .clickable { onNavigate(forecast.day) }
+                        .clickable { onNavigate(forecast.date) }
                 ) {
                     Text(text = forecast.day, fontWeight = FontWeight.Bold)
                     Row(modifier = Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -204,7 +204,8 @@ private fun getMockForecasts(): List<ForecastItem> {
             ),
             chanceOfRain = "0",
             chanceOfSnow = "0",
-            averageHumidity = "20"
+            averageHumidity = "20",
+            date = ""
         ),
         ForecastItem(
             day = "Tuesday",
@@ -225,7 +226,8 @@ private fun getMockForecasts(): List<ForecastItem> {
             ),
             chanceOfRain = "5",
             chanceOfSnow = "0",
-            averageHumidity = "25"
+            averageHumidity = "25",
+            date = ""
         ),
         ForecastItem(
             day = "Wednesday",
@@ -246,7 +248,8 @@ private fun getMockForecasts(): List<ForecastItem> {
             ),
             chanceOfRain = "0",
             chanceOfSnow = "0",
-            averageHumidity = "18"
+            averageHumidity = "18",
+            date = ""
         ),
         ForecastItem( // Thu
             day = "Thursday",
@@ -267,7 +270,8 @@ private fun getMockForecasts(): List<ForecastItem> {
             ),
             chanceOfRain = "40",
             chanceOfSnow = "0",
-            averageHumidity = "60"
+            averageHumidity = "60",
+            date = ""
         ),
         ForecastItem( // Fri
             day = "Friday",
@@ -288,7 +292,8 @@ private fun getMockForecasts(): List<ForecastItem> {
             ),
             chanceOfRain = "10",
             chanceOfSnow = "0",
-            averageHumidity = "55"
+            averageHumidity = "55",
+            date = ""
         ),
         ForecastItem(
             day = "Saturday",
@@ -309,7 +314,8 @@ private fun getMockForecasts(): List<ForecastItem> {
             ),
             chanceOfRain = "",
             chanceOfSnow = "",
-            averageHumidity = ""
+            averageHumidity = "",
+            date = ""
         )
     )
 }

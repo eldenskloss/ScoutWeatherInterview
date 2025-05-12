@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.scoutweatherinterview.core.navigation.Screens
 import com.example.scoutweatherinterview.feature.weather.presentation.ForecastDetailScreen
 import com.example.scoutweatherinterview.feature.weather.presentation.SevenDayForecastScreen
@@ -21,13 +22,14 @@ fun AppNavHost(
         builder = {
             composable<Screens.SevenDayForecast> {
                 SevenDayForecastScreen(
-                    onNavigate = { forecastID ->
-                        navController.navigate(Screens.ForecastDetailScreen(forecastID))
+                    onNavigate = { forecastDate ->
+                        navController.navigate(Screens.ForecastDetailScreen(forecastDate))
                     }
                 )
             }
-            composable<Screens.ForecastDetailScreen> {
-                ForecastDetailScreen()
+            composable<Screens.ForecastDetailScreen> { entry ->
+                val forecastDate = entry.toRoute<Screens.ForecastDetailScreen>().forecastDate
+                ForecastDetailScreen(forecastDate)
             }
         }
     )

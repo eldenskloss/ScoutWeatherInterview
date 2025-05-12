@@ -1,6 +1,7 @@
 package com.example.scoutweatherinterview.feature.weather.domain.model
 
 data class ForecastItem(
+    val date: String,
     val day: String,
     val temperaturesInFahrenheit: Temperatures,
     val temperaturesInCelsius: Temperatures,
