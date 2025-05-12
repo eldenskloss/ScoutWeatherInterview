@@ -4,18 +4,14 @@ import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +33,8 @@ import com.example.scoutweatherinterview.feature.weather.domain.model.ForecastIt
 import com.example.scoutweatherinterview.feature.weather.domain.model.Location
 import com.example.scoutweatherinterview.feature.weather.domain.model.Temperatures
 import com.example.scoutweatherinterview.feature.weather.presentation.viewmodels.SevenDayForecastViewModel
+import com.example.scoutweatherinterview.ui.components.ErrorScreen
+import com.example.scoutweatherinterview.ui.components.LoadingScreen
 import com.example.scoutweatherinterview.ui.theme.ScoutWeatherInterviewTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -83,29 +81,6 @@ fun SevenDayForecastScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun ErrorScreen(modifier: Modifier = Modifier, errorText: String) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(errorText)
-    }
-}
-
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(24.dp),
-            strokeWidth = 4.dp
-        )
     }
 }
 
