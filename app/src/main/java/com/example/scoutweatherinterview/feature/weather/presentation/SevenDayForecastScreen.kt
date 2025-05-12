@@ -2,10 +2,11 @@ package com.example.scoutweatherinterview.feature.weather.presentation
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,12 +24,20 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scoutweatherinterview.core.CommonUIState
+import com.example.scoutweatherinterview.feature.weather.domain.model.Condition
 import com.example.scoutweatherinterview.feature.weather.domain.model.Forecast
+import com.example.scoutweatherinterview.feature.weather.domain.model.ForecastItem
+import com.example.scoutweatherinterview.feature.weather.domain.model.Location
+import com.example.scoutweatherinterview.feature.weather.domain.model.Temperatures
 import com.example.scoutweatherinterview.feature.weather.presentation.viewmodels.SevenDayForecastViewModel
+import com.example.scoutweatherinterview.ui.theme.ScoutWeatherInterviewTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.skydoves.landscapist.ImageOptions
@@ -104,42 +113,203 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 fun ForecastContent(
     modifier: Modifier = Modifier,
     forecast: Forecast,
+    shouldShowInFahrenheit: Boolean = true,
     onNavigate: (forecastID: String) -> Unit
 ) {
     Column(
         modifier = modifier
             .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text("Seven Day Forecast screen for ${forecast.location.name}")
+        Text("Seven Day Forecast for ${forecast.location.name}")
         forecast.forecasts.forEach { forecast ->
-
-            Spacer(modifier = Modifier.height(8.dp)) // Use space between and a list instead
-
+            val temperatures = if (shouldShowInFahrenheit) {
+                forecast.temperaturesInFahrenheit
+            } else {
+                forecast.temperaturesInCelsius
+            }
+            val unicodeTemp = if (shouldShowInFahrenheit) "\u2109" else "\u2103"
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .clickable { onNavigate(forecast.day) }
+                ) {
+                    Text(text = forecast.day, fontWeight = FontWeight.Bold)
+                    Row(modifier = Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         GlideImage(
-                            modifier = Modifier.height(32.dp),
+                            modifier = Modifier.height(40.dp),
                             imageModel = { forecast.condition.icon },
                             imageOptions = ImageOptions(contentScale = ContentScale.Fit)
                         )
-                        Text(forecast.condition.text)
+                        Text(text = forecast.condition.text, fontSize = 18.sp)
                     }
-                    Row {
-                        Text("Highs of ${forecast.temperatureHigh} and lows of ${forecast.temperatureLow}")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row {
+                            Text(text = "Low:", fontWeight = FontWeight.Bold)
+                            Text("${temperatures.temperatureLow}$unicodeTemp")
+                        }
+                        Row {
+                            Text(text = "Avg:", fontWeight = FontWeight.Bold)
+                            Text("${temperatures.averageTemperature}$unicodeTemp")
+                        }
+                        Row {
+                            Text(text = "High:", fontWeight = FontWeight.Bold)
+                            Text("${temperatures.temperatureHigh}$unicodeTemp")
+                        }
                     }
-                    Text("Date: ${forecast.day} Humidity: ${forecast.humidity} wind: ${forecast.windInMph}")
                 }
             }
         }
     }
 }
 
-// @Preview(showBackground = true)
-// @Composable
-// fun ForecastPreview() {
-//    ScoutWeatherInterviewTheme {
-//        Forecast(viewModel = viewModel, onNavigate = {})
-//    }
-// }
+@Preview(showBackground = true)
+@Composable
+fun ForecastPreview() {
+    val mockForecast = Forecast(
+        location = Location("San Antonio", "Tx", "United States"),
+        forecasts = getMockForecasts()
+    )
+    ScoutWeatherInterviewTheme {
+        ForecastContent(
+            forecast = mockForecast,
+            onNavigate = {}
+        )
+    }
+}
+
+private fun getMockForecasts(): List<ForecastItem> {
+    return listOf(
+        ForecastItem(
+            day = "Today",
+            temperaturesInFahrenheit = Temperatures(
+                averageTemperature = "90",
+                temperatureLow = "60",
+                temperatureHigh = "99"
+            ),
+            temperaturesInCelsius = Temperatures(
+                averageTemperature = "32",
+                temperatureLow = "15",
+                temperatureHigh = "37"
+            ),
+            condition = Condition(
+                "Sunny",
+                "https://cdn.weatherapi.com/weather/64x64/day/113.png",
+                100
+            ),
+            chanceOfRain = "0",
+            chanceOfSnow = "0",
+            averageHumidity = "20"
+        ),
+        ForecastItem(
+            day = "Tuesday",
+            temperaturesInFahrenheit = Temperatures(
+                averageTemperature = "85",
+                temperatureLow = "58",
+                temperatureHigh = "92"
+            ),
+            temperaturesInCelsius = Temperatures(
+                averageTemperature = "29",
+                temperatureLow = "14",
+                temperatureHigh = "33"
+            ),
+            condition = Condition(
+                "Partly cloudy",
+                "https://cdn.weatherapi.com/weather/64x64/day/116.png",
+                100
+            ),
+            chanceOfRain = "5",
+            chanceOfSnow = "0",
+            averageHumidity = "25"
+        ),
+        ForecastItem(
+            day = "Wednesday",
+            temperaturesInFahrenheit = Temperatures(
+                averageTemperature = "88",
+                temperatureLow = "62",
+                temperatureHigh = "95"
+            ),
+            temperaturesInCelsius = Temperatures(
+                averageTemperature = "31",
+                temperatureLow = "17",
+                temperatureHigh = "35"
+            ),
+            condition = Condition(
+                "Clear",
+                "https://cdn.weatherapi.com/weather/64x64/day/113.png",
+                100
+            ),
+            chanceOfRain = "0",
+            chanceOfSnow = "0",
+            averageHumidity = "18"
+        ),
+        ForecastItem( // Thu
+            day = "Thursday",
+            temperaturesInFahrenheit = Temperatures(
+                averageTemperature = "78",
+                temperatureLow = "55",
+                temperatureHigh = "85"
+            ),
+            temperaturesInCelsius = Temperatures(
+                averageTemperature = "26",
+                temperatureLow = "13",
+                temperatureHigh = "29"
+            ),
+            condition = Condition(
+                "Light rain shower",
+                "https://cdn.weatherapi.com/weather/64x64/day/353.png",
+                100
+            ),
+            chanceOfRain = "40",
+            chanceOfSnow = "0",
+            averageHumidity = "60"
+        ),
+        ForecastItem( // Fri
+            day = "Friday",
+            temperaturesInFahrenheit = Temperatures(
+                averageTemperature = "80",
+                temperatureLow = "56",
+                temperatureHigh = "88"
+            ),
+            temperaturesInCelsius = Temperatures(
+                averageTemperature = "27",
+                temperatureLow = "13",
+                temperatureHigh = "31"
+            ),
+            condition = Condition(
+                "Cloudy",
+                "https://cdn.weatherapi.com/weather/64x64/day/119.png",
+                100
+            ),
+            chanceOfRain = "10",
+            chanceOfSnow = "0",
+            averageHumidity = "55"
+        ),
+        ForecastItem(
+            day = "Saturday",
+            temperaturesInFahrenheit = Temperatures(
+                averageTemperature = "82",
+                temperatureLow = "57",
+                temperatureHigh = "90"
+            ),
+            temperaturesInCelsius = Temperatures(
+                averageTemperature = "28",
+                temperatureLow = "14",
+                temperatureHigh = "32"
+            ),
+            condition = Condition(
+                "Sunny",
+                "https://cdn.weatherapi.com/weather/64x64/day/113.png",
+                100
+            ),
+            chanceOfRain = "",
+            chanceOfSnow = "",
+            averageHumidity = ""
+        )
+    )
+}
