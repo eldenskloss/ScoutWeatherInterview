@@ -18,7 +18,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 @Singleton
 class DataStoreManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context
-): DataStoreManager {
+) : DataStoreManager {
     companion object {
         val USING_FAHRENHEIT = booleanPreferencesKey("USING_FAHRENHEIT")
     }
@@ -28,7 +28,7 @@ class DataStoreManagerImpl @Inject constructor(
         }
     }
 
-    override fun getIsFahrenheit() : Flow<Boolean> {
+    override fun getIsFahrenheit(): Flow<Boolean> {
         return context.dataStore.data.map { pref ->
             pref[USING_FAHRENHEIT] ?: true
         }

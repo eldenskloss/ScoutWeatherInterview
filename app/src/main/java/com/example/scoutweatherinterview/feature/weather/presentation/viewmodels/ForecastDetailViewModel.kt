@@ -20,7 +20,7 @@ class ForecastDetailViewModel @Inject constructor(
     private val fetchForecast: FetchForecastUseCase,
     private val locationRepository: LocationRepository,
     dataStoreManager: DataStoreManager,
-    logger: Logger,
+    logger: Logger
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<CommonUIState<ForecastDetails>>(CommonUIState.Loading)
     val uiState = _uiState.asStateFlow()

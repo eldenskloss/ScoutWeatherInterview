@@ -85,7 +85,8 @@ fun SevenDayForecastScreen(
                         shouldShowInFahrenheit = isFahrenheitState,
                         onToggled = { isChecked ->
                             viewModel.setIsFahrenheit(isChecked)
-                        })
+                        }
+                    )
                 }
             }
         }

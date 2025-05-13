@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface DataStoreManager {
     suspend fun setIsFahrenheit(isFahrenheit: Boolean)
-    fun getIsFahrenheit() : Flow<Boolean>
+    fun getIsFahrenheit(): Flow<Boolean>
 }

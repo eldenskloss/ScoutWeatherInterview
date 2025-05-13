@@ -51,8 +51,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesFetchForecastRepository(api: FetchForecastApi): FetchForecastRepository {
-        return FetchForecastRepositoryImpl(api)
+    fun providesFetchForecastRepository(api: FetchForecastApi, logger: Logger): FetchForecastRepository {
+        return FetchForecastRepositoryImpl(api = api, logger = logger)
     }
 
     @Provides
