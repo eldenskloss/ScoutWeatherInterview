@@ -44,7 +44,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -68,6 +67,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.glide)
     implementation(libs.accompanist.permissions)
+    implementation(libs.androidx.datastore.preferences)
     ksp(libs.hilt.compiler)
 }
 

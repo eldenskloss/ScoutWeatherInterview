@@ -6,6 +6,7 @@ import com.example.scoutweatherinterview.core.CommonUIState
 import com.example.scoutweatherinterview.core.LocationResult
 import com.example.scoutweatherinterview.feature.weather.domain.FetchForecastUseCase
 import com.example.scoutweatherinterview.feature.weather.domain.model.ForecastDetails
+import com.example.scoutweatherinterview.feature.weather.domain.repository.DataStoreManager
 import com.example.scoutweatherinterview.feature.weather.domain.repository.LocationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,10 +17,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ForecastDetailViewModel @Inject constructor(
     private val fetchForecast: FetchForecastUseCase,
-    private val locationRepository: LocationRepository
+    private val locationRepository: LocationRepository,
+    private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<CommonUIState<ForecastDetails>>(CommonUIState.Loading)
     val uiState = _uiState.asStateFlow()
+    val isFahrenheitState = dataStoreManager.getIsFahrenheit()
 
     fun fetchWeatherFromLocation(forecastDate: String) {
         viewModelScope.launch {

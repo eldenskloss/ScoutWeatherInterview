@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +48,7 @@ fun SevenDayForecastScreen(
     viewModel: SevenDayForecastViewModel = hiltViewModel<SevenDayForecastViewModel>(),
     onNavigate: (forecastDate: String) -> Unit
 ) {
+    val isFahrenheitState = viewModel.isFahrenheitState.collectAsStateWithLifecycle(true).value
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val locationPermissionState = rememberMultiplePermissionsState(
         listOf(
@@ -77,7 +79,13 @@ fun SevenDayForecastScreen(
                 }
 
                 is CommonUIState.Success -> {
-                    ForecastContent(forecast = uiState.result, onNavigate = onNavigate)
+                    ForecastContent(
+                        forecast = uiState.result,
+                        onNavigate = onNavigate,
+                        shouldShowInFahrenheit = isFahrenheitState,
+                        onToggled = { isChecked ->
+                            viewModel.setIsFahrenheit(isChecked)
+                        })
                 }
             }
         }
@@ -89,6 +97,7 @@ fun ForecastContent(
     modifier: Modifier = Modifier,
     forecast: Forecast,
     shouldShowInFahrenheit: Boolean = true,
+    onToggled: (isChecked: Boolean) -> Unit,
     onNavigate: (forecastDate: String) -> Unit
 ) {
     Column(
@@ -98,6 +107,18 @@ fun ForecastContent(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text("Seven Day Forecast for ${forecast.location.name}")
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text("Use Fahrenheit")
+            Switch(
+                checked = shouldShowInFahrenheit,
+                onCheckedChange = {
+                    onToggled(it)
+                }
+            )
+        }
         forecast.forecasts.forEach { forecast ->
             val temperatures = forecast.getTemperatureFor(shouldShowInFahrenheit)
             val unicodeTemp = forecast.getTemperatureSign(shouldShowInFahrenheit)
@@ -153,6 +174,7 @@ fun ForecastPreview() {
     ScoutWeatherInterviewTheme {
         ForecastContent(
             forecast = mockForecast,
+            onToggled = {},
             onNavigate = {}
         )
     }

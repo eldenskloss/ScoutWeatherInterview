@@ -43,6 +43,7 @@ fun ForecastDetailScreen(
         viewModel.fetchWeatherFromLocation(forecastDate)
     }
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val isFahrenheitState = viewModel.isFahrenheitState.collectAsStateWithLifecycle(true).value
 
     Scaffold { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
@@ -56,7 +57,7 @@ fun ForecastDetailScreen(
                 }
 
                 is CommonUIState.Success -> {
-                    ForecastDetailContent(forecastDetails = uiState.result)
+                    ForecastDetailContent(forecastDetails = uiState.result, shouldShowInFahrenheit = isFahrenheitState)
                 }
             }
         }

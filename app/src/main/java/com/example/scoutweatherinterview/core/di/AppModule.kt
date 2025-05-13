@@ -3,9 +3,11 @@ package com.example.scoutweatherinterview.core.di
 import android.app.Application
 import com.example.scoutweatherinterview.core.Constants.WEATHER_API_BASE_URL
 import com.example.scoutweatherinterview.core.network.CacheInterceptor
+import com.example.scoutweatherinterview.feature.weather.data.repository.DataStoreManagerImpl
 import com.example.scoutweatherinterview.feature.weather.data.repository.FetchForecastApi
 import com.example.scoutweatherinterview.feature.weather.data.repository.FetchForecastRepositoryImpl
 import com.example.scoutweatherinterview.feature.weather.data.repository.LocationRepositoryImpl
+import com.example.scoutweatherinterview.feature.weather.domain.repository.DataStoreManager
 import com.example.scoutweatherinterview.feature.weather.domain.repository.FetchForecastRepository
 import com.example.scoutweatherinterview.feature.weather.domain.repository.LocationRepository
 import dagger.Module
@@ -55,5 +57,11 @@ object AppModule {
     @Singleton
     fun providesLocationRepository(application: Application): LocationRepository {
         return LocationRepositoryImpl(application)
+    }
+
+    @Provides
+    @Singleton
+    fun providesDataStoreManager(application: Application): DataStoreManager {
+        return DataStoreManagerImpl(application)
     }
 }
