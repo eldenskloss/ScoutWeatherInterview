@@ -106,6 +106,29 @@ fun ForecastContent(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        TopSection(
+            forecast = forecast,
+            shouldShowInFahrenheit = shouldShowInFahrenheit,
+            onToggled = onToggled
+        )
+        forecast.forecasts.forEach { forecast ->
+            ForecastRow(
+                forecast = forecast,
+                shouldShowInFahrenheit = shouldShowInFahrenheit,
+                onNavigate = onNavigate
+            )
+        }
+    }
+}
+
+@Composable
+private fun TopSection(
+    modifier: Modifier = Modifier,
+    forecast: Forecast,
+    shouldShowInFahrenheit: Boolean,
+    onToggled: (isChecked: Boolean) -> Unit
+) {
+    Column(modifier = modifier) {
         Text("Seven Day Forecast for ${forecast.location.name}")
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -119,18 +142,11 @@ fun ForecastContent(
                 }
             )
         }
-        forecast.forecasts.forEach { forecast ->
-            ForecastRow(
-                forecast = forecast,
-                shouldShowInFahrenheit = shouldShowInFahrenheit,
-                onNavigate = onNavigate
-            )
-        }
     }
 }
 
 @Composable
-fun ForecastRow(
+private fun ForecastRow(
     modifier: Modifier = Modifier,
     forecast: ForecastItem,
     shouldShowInFahrenheit: Boolean,
@@ -329,4 +345,32 @@ private fun getMockForecasts(): List<ForecastItem> {
             date = ""
         )
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TopSectionPreview(modifier: Modifier = Modifier) {
+    val mockForecast = Forecast(
+        location = Location("San Antonio", "Tx", "United States"),
+        forecasts = getMockForecasts()
+    )
+    ScoutWeatherInterviewTheme {
+        TopSection(
+            forecast = mockForecast,
+            shouldShowInFahrenheit = true,
+            onToggled = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ForecastRowPreview(modifier: Modifier = Modifier) {
+    ScoutWeatherInterviewTheme {
+        ForecastRow(
+            forecast = getMockForecasts().first(),
+            shouldShowInFahrenheit = true,
+            onNavigate = {}
+        )
+    }
 }
