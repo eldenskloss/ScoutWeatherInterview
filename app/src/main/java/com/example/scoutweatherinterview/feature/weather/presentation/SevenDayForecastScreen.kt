@@ -99,12 +99,8 @@ fun ForecastContent(
     ) {
         Text("Seven Day Forecast for ${forecast.location.name}")
         forecast.forecasts.forEach { forecast ->
-            val temperatures = if (shouldShowInFahrenheit) {
-                forecast.temperaturesInFahrenheit
-            } else {
-                forecast.temperaturesInCelsius
-            }
-            val unicodeTemp = if (shouldShowInFahrenheit) "\u2109" else "\u2103"
+            val temperatures = forecast.getTemperatureFor(shouldShowInFahrenheit)
+            val unicodeTemp = forecast.getTemperatureSign(shouldShowInFahrenheit)
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier
@@ -112,7 +108,11 @@ fun ForecastContent(
                         .clickable { onNavigate(forecast.date) }
                 ) {
                     Text(text = forecast.day, fontWeight = FontWeight.Bold)
-                    Row(modifier = Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         GlideImage(
                             modifier = Modifier.height(40.dp),
                             imageModel = { forecast.condition.icon },

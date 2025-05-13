@@ -1,5 +1,7 @@
 package com.example.scoutweatherinterview.feature.weather.domain.model
 
+import com.example.scoutweatherinterview.core.Constants
+
 data class ForecastItem(
     val date: String,
     val day: String,
@@ -9,7 +11,19 @@ data class ForecastItem(
     val chanceOfRain: String,
     val chanceOfSnow: String,
     val averageHumidity: String
-)
+) {
+    fun getTemperatureFor(isFahrenheit: Boolean): Temperatures {
+        return if (isFahrenheit) {
+            temperaturesInFahrenheit
+        } else {
+            temperaturesInCelsius
+        }
+    }
+
+    fun getTemperatureSign(isFahrenheit: Boolean): String {
+        return if (isFahrenheit) Constants.FAHRENHEIT_UNICODE else Constants.CELSIUS_UNICODE
+    }
+}
 
 data class Temperatures(
     val averageTemperature: String,
