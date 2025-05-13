@@ -2,6 +2,8 @@ package com.example.scoutweatherinterview.core.di
 
 import android.app.Application
 import com.example.scoutweatherinterview.core.Constants.WEATHER_API_BASE_URL
+import com.example.scoutweatherinterview.core.logging.Logger
+import com.example.scoutweatherinterview.core.logging.LoggerImpl
 import com.example.scoutweatherinterview.core.network.CacheInterceptor
 import com.example.scoutweatherinterview.feature.weather.data.repository.DataStoreManagerImpl
 import com.example.scoutweatherinterview.feature.weather.data.repository.FetchForecastApi
@@ -63,5 +65,10 @@ object AppModule {
     @Singleton
     fun providesDataStoreManager(application: Application): DataStoreManager {
         return DataStoreManagerImpl(application)
+    }
+
+    @Provides
+    fun providesLogger(): Logger {
+        return LoggerImpl()
     }
 }

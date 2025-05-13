@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scoutweatherinterview.core.CommonUIState
 import com.example.scoutweatherinterview.core.LocationResult
+import com.example.scoutweatherinterview.core.logging.Logger
 import com.example.scoutweatherinterview.feature.weather.domain.FetchForecastUseCase
 import com.example.scoutweatherinterview.feature.weather.domain.model.ForecastDetails
 import com.example.scoutweatherinterview.feature.weather.domain.repository.DataStoreManager
@@ -18,11 +19,16 @@ import javax.inject.Inject
 class ForecastDetailViewModel @Inject constructor(
     private val fetchForecast: FetchForecastUseCase,
     private val locationRepository: LocationRepository,
-    private val dataStoreManager: DataStoreManager
+    dataStoreManager: DataStoreManager,
+    logger: Logger,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<CommonUIState<ForecastDetails>>(CommonUIState.Loading)
     val uiState = _uiState.asStateFlow()
     val isFahrenheitState = dataStoreManager.getIsFahrenheit()
+
+    init {
+        logger.onScreenViewed("ForecastDetailScreen")
+    }
 
     fun fetchWeatherFromLocation(forecastDate: String) {
         viewModelScope.launch {
