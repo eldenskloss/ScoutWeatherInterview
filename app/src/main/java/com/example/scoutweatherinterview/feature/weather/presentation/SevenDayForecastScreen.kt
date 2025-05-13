@@ -120,44 +120,58 @@ fun ForecastContent(
             )
         }
         forecast.forecasts.forEach { forecast ->
-            val temperatures = forecast.getTemperatureFor(shouldShowInFahrenheit)
-            val unicodeTemp = forecast.getTemperatureSign(shouldShowInFahrenheit)
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .clickable { onNavigate(forecast.date) }
-                ) {
-                    Text(text = forecast.day, fontWeight = FontWeight.Bold)
-                    Row(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        GlideImage(
-                            modifier = Modifier.height(40.dp),
-                            imageModel = { forecast.condition.icon },
-                            imageOptions = ImageOptions(contentScale = ContentScale.Fit)
-                        )
-                        Text(text = forecast.condition.text, fontSize = 18.sp)
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row {
-                            Text(text = "Low:", fontWeight = FontWeight.Bold)
-                            Text("${temperatures.temperatureLow}$unicodeTemp")
-                        }
-                        Row {
-                            Text(text = "Avg:", fontWeight = FontWeight.Bold)
-                            Text("${temperatures.averageTemperature}$unicodeTemp")
-                        }
-                        Row {
-                            Text(text = "High:", fontWeight = FontWeight.Bold)
-                            Text("${temperatures.temperatureHigh}$unicodeTemp")
-                        }
-                    }
+            ForecastRow(
+                forecast = forecast,
+                shouldShowInFahrenheit = shouldShowInFahrenheit,
+                onNavigate = onNavigate
+            )
+        }
+    }
+}
+
+@Composable
+fun ForecastRow(
+    modifier: Modifier = Modifier,
+    forecast: ForecastItem,
+    shouldShowInFahrenheit: Boolean,
+    onNavigate: (forecastDate: String) -> Unit
+) {
+    val temperatures = forecast.getTemperatureFor(shouldShowInFahrenheit)
+    val unicodeTemp = forecast.getTemperatureSign(shouldShowInFahrenheit)
+    Card(modifier = modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable { onNavigate(forecast.date) }
+        ) {
+            Text(text = forecast.day, fontWeight = FontWeight.Bold)
+            Row(
+                modifier = Modifier.padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                GlideImage(
+                    modifier = Modifier.height(40.dp),
+                    imageModel = { forecast.condition.icon },
+                    imageOptions = ImageOptions(contentScale = ContentScale.Fit)
+                )
+                Text(text = forecast.condition.text, fontSize = 18.sp)
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row {
+                    Text(text = "Low:", fontWeight = FontWeight.Bold)
+                    Text("${temperatures.temperatureLow}$unicodeTemp")
+                }
+                Row {
+                    Text(text = "Avg:", fontWeight = FontWeight.Bold)
+                    Text("${temperatures.averageTemperature}$unicodeTemp")
+                }
+                Row {
+                    Text(text = "High:", fontWeight = FontWeight.Bold)
+                    Text("${temperatures.temperatureHigh}$unicodeTemp")
                 }
             }
         }
