@@ -1,6 +1,5 @@
 package com.example.scoutweatherinterview
 
-import androidx.compose.runtime.collectAsState
 import com.example.scoutweatherinterview.core.CommonUIState
 import com.example.scoutweatherinterview.core.LocationResult
 import com.example.scoutweatherinterview.core.logging.Logger
@@ -72,12 +71,13 @@ class SevenDayForecastViewModelTest {
         )
     }
 
-
     @Test
     fun successWeather() = runTest {
-        `when`(locationRepository.getUsersLocation()).thenReturn(LocationResult.Success(
-            CurrentLocation("1", "2")
-        ))
+        `when`(locationRepository.getUsersLocation()).thenReturn(
+            LocationResult.Success(
+                CurrentLocation("1", "2")
+            )
+        )
         `when`(fetchForecastRepository.fetchForecast("1", "2")).thenReturn(
             CommonResponse.Success(
                 Forecast(Location("San Antonio", "", ""), emptyList())

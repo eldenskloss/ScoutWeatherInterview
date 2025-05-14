@@ -78,7 +78,6 @@ dependencies {
     androidTestImplementation(libs.mockito.kotlin)
     androidTestImplementation(libs.mockito.android)
     androidTestImplementation(kotlin("test"))
-
 }
 
 // Copies tracked pre-commit hook in scripts to untracked directory .git/hooks
