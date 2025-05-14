@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.HorizontalDivider
@@ -78,7 +80,7 @@ fun ForecastDetailContent(
     val temperatures = forecastDetails.forecast.getTemperatureFor(shouldShowInFahrenheit)
     val unicodeTemp = forecastDetails.forecast.getTemperatureSign(shouldShowInFahrenheit)
     val forecast = forecastDetails.forecast
-    Column(modifier = modifier.padding(16.dp)) {
+    Column(modifier = modifier.padding(16.dp).verticalScroll(rememberScrollState())) {
         Text(text = forecast.day, fontSize = 18.sp, fontWeight = FontWeight.Medium)
 
         Text(text = "${forecastDetails.location.name} ${forecastDetails.location.region}", fontSize = 18.sp, fontWeight = FontWeight.Normal)
