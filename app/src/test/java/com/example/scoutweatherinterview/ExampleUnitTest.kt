@@ -53,10 +53,11 @@ class ExampleUnitTest {
                     )
                 )
             ),
-            location = LocationDTO("London", 10.0, "", 1000, 10.0, "", "", "")
+            location = LocationDTO("United States", 10.0, "", 1000, 10.0, "", "", "")
         )
         val convertedDTO = dto.toForecast()
         assertEquals(dto.forecast.forecastday.first().date, convertedDTO.forecasts.first().date)
         assertEquals("Thursday", convertedDTO.forecasts.first().day)
+        assertEquals("United States", convertedDTO.location.country)
     }
 }
