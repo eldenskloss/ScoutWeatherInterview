@@ -37,7 +37,6 @@ open class SevenDayForecastViewModel @Inject constructor(
         }
     }
 
-    // TODO: Clean this up, use transform instead
     fun fetchWeatherFromLocation() {
         viewModelScope.launch {
             when (val locationResult = locationRepository.getUsersLocation()) {
@@ -48,11 +47,15 @@ open class SevenDayForecastViewModel @Inject constructor(
                     // Ask for permission
                 }
                 is LocationResult.Success -> {
-                    fetchForecast.fetchForecast(locationResult.location.lat, locationResult.location.long).collect { state ->
-                        _uiState.value = state
-                    }
+                    collectStateForFetchingForecast(locationResult.location.lat, locationResult.location.long)
                 }
             }
+        }
+    }
+
+    private suspend fun collectStateForFetchingForecast(lat: String, long: String) {
+        fetchForecast.fetchForecast(lat, long).collect { state ->
+            _uiState.value = state
         }
     }
 }
