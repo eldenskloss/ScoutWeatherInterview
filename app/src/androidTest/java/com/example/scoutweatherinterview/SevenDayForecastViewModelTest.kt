@@ -14,6 +14,7 @@ import com.example.scoutweatherinterview.feature.weather.domain.repository.Fetch
 import com.example.scoutweatherinterview.feature.weather.domain.repository.LocationRepository
 import com.example.scoutweatherinterview.feature.weather.presentation.viewmodels.SevenDayForecastViewModel
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.runTest
@@ -84,11 +85,10 @@ class SevenDayForecastViewModelTest {
         )
         viewModel.fetchWeatherFromLocation()
 
-        val result = viewModel.uiState.take(1).first()
+        val result = viewModel.uiState.drop(1).first()
         assertEquals(
             CommonUIState.Success(Forecast(Location("San Antonio", "", ""), emptyList())),
-            (result as? CommonUIState.Success)?.result?.location?.name ?: ""
+            result
         )
     }
-
 }
