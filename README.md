@@ -1,5 +1,5 @@
 # Scout Weather Interview App
-- **Skip to bottom to see setup instructions** 
+- **Skip to bottom to see setup instructions**
 
 ## Requirements
 - Create a weather app.
@@ -63,8 +63,8 @@ Ensure you have the following installed:
 
 ## Setup Instructions
 1. **Clone the repository:**
- - git clone https://github.com/eldenskloss/ScoutWeatherInterview.git
- - cd scout-weather-interview
+- git clone https://github.com/eldenskloss/ScoutWeatherInterview.git
+- cd scout-weather-interview
 2. **Open Project in Android Studio:**
 3. **Sync the project**
 4. **Start up emulator or plug in device**
@@ -73,4 +73,13 @@ Ensure you have the following installed:
 
 ## Contribution Instructions
 1. **Ensure you have KTLINT installed**
-  - brew install ktlint
+- brew install ktlint
+
+
+
+## If I had more time
+1. Add API key to a keystore property (Left it in in place to make pulling repo easier)
+2. Re ask user for permission on screen if they clicked cancel
+3. Re try network call if network call fails
+4. Create a simple CI/CD to deploy
+5. Prompt user if GPS is disabled
