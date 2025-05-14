@@ -7,13 +7,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,7 +59,10 @@ fun ForecastDetailScreen(
                 }
 
                 is CommonUIState.Success -> {
-                    ForecastDetailContent(forecastDetails = uiState.result, shouldShowInFahrenheit = isFahrenheitState)
+                    ForecastDetailContent(
+                        forecastDetails = uiState.result,
+                        shouldShowInFahrenheit = isFahrenheitState
+                    )
                 }
             }
         }
@@ -74,15 +79,9 @@ fun ForecastDetailContent(
     val unicodeTemp = forecastDetails.forecast.getTemperatureSign(shouldShowInFahrenheit)
     val forecast = forecastDetails.forecast
     Column(modifier = modifier.padding(16.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(forecast.day)
-            Text("${temperatures.temperatureLow}/ ${temperatures.temperatureHigh}$unicodeTemp")
-        }
-        Text("${forecastDetails.location.name} ${forecastDetails.location.region}")
+        Text(text = forecast.day, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+
+        Text(text = "${forecastDetails.location.name} ${forecastDetails.location.region}", fontSize = 18.sp, fontWeight = FontWeight.Normal)
 
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -99,8 +98,25 @@ fun ForecastDetailContent(
             }
             Text(text = forecast.condition.text, fontSize = 24.sp)
         }
+        ForecastDetailsGridSection(
+            informationSection = listOf(
+                Pair("Lows", "${temperatures.temperatureLow}$unicodeTemp"),
+                Pair("Highs", "${temperatures.temperatureHigh}$unicodeTemp"),
+                Pair("Rain", "${forecast.chanceOfRain}%"),
+                Pair("Snow", "${forecast.chanceOfSnow}%"),
+                Pair("Humidity", "${forecast.averageHumidity}%")
+            )
+        )
+    }
+}
 
-        Card(modifier = Modifier.padding(top = 32.dp)) {
+@Composable
+private fun ForecastDetailsGridSection(modifier: Modifier = Modifier, informationSection: List<Pair<String, String>>) {
+    Card(modifier = modifier.padding(top = 32.dp), colors = CardColors(containerColor = Color.White, disabledContainerColor = Color.White, contentColor = Color.Black, disabledContentColor = Color.Black)) {
+        val groupedByTwoSection = informationSection.chunked(2)
+        groupedByTwoSection.forEachIndexed { index, chunk ->
+            val leftSection = chunk.first()
+            val rightSection = chunk.getOrNull(1)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,23 +124,21 @@ fun ForecastDetailContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
-                    Text(text = "Humidity", fontWeight = FontWeight.Bold)
-                    Text("${forecast.averageHumidity}%")
+                leftSection.let { (title, subTitle) ->
+                    Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
+                        Text(text = title, fontWeight = FontWeight.Bold)
+                        Text(subTitle)
+                    }
                 }
-                VerticalDivider(Modifier.height(32.dp))
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = "Rain", fontWeight = FontWeight.Bold)
-                    Text("${forecast.chanceOfRain}%")
+                rightSection?.let { (title, subTitle) ->
+                    Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
+                        Text(text = title, fontWeight = FontWeight.Bold)
+                        Text(subTitle)
+                    }
                 }
-                VerticalDivider(Modifier.height(32.dp))
-                Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-                    Text(text = "Snow", fontWeight = FontWeight.Bold)
-                    Text("${forecast.chanceOfSnow}%")
-                }
+            }
+            if (index != groupedByTwoSection.size - 1) {
+                HorizontalDivider(Modifier.padding(horizontal = 8.dp))
             }
         }
     }
