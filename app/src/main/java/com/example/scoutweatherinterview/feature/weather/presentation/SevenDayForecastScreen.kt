@@ -132,12 +132,13 @@ private fun TopSection(
     onToggled: (isChecked: Boolean) -> Unit
 ) {
     Column(modifier = modifier) {
-        Text("Seven Day Forecast for ${forecast.location.name}")
+        Text(text = "${forecast.location.name} forecast", fontSize = 24.sp)
         Row(
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Use Fahrenheit")
+            Text(text = "Use Fahrenheit:", fontSize = 16.sp)
             Switch(
                 checked = shouldShowInFahrenheit,
                 onCheckedChange = {
