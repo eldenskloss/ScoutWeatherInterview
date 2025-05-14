@@ -69,3 +69,8 @@ Ensure you have the following installed:
 3. **Sync the project**
 4. **Start up emulator or plug in device**
 5. **Run Project**
+
+
+## Contribution Instructions
+1. **Ensure you have KTLINT installed**
+  - brew install ktlint
