@@ -6,8 +6,9 @@ import retrofit2.http.Query
 
 interface FetchForecastApi {
     companion object {
+        private const val KEY = "" // Your Key Here
         private const val SUB_ROUTE = "v1/forecast.json"
-        private const val KEY_QUERY = "?key=12fbe33b7bc8479ba10170537251005"
+        private const val KEY_QUERY = "?key=$KEY"
     }
 
     @GET("/$SUB_ROUTE$KEY_QUERY")
