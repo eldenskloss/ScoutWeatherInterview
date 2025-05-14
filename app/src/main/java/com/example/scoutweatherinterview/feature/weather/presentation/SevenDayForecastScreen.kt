@@ -6,9 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -172,23 +174,17 @@ private fun ForecastRow(
                     imageModel = { forecast.condition.icon },
                     imageOptions = ImageOptions(contentScale = ContentScale.Fit)
                 )
-                Text(text = forecast.condition.text, fontSize = 18.sp)
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row {
-                    Text(text = "Low:", fontWeight = FontWeight.Bold)
-                    Text("${temperatures.temperatureLow}$unicodeTemp")
+                Row(verticalAlignment = Alignment.Top) {
+                    Text(text = temperatures.averageTemperature, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                    Text(unicodeTemp)
                 }
-                Row {
-                    Text(text = "Avg:", fontWeight = FontWeight.Bold)
-                    Text("${temperatures.averageTemperature}$unicodeTemp")
-                }
-                Row {
-                    Text(text = "High:", fontWeight = FontWeight.Bold)
-                    Text("${temperatures.temperatureHigh}$unicodeTemp")
+                Spacer(modifier = Modifier.width(8.dp))
+                Column {
+                    Text(text = forecast.condition.text, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                    Text(
+                        text = "Lows ${temperatures.temperatureLow}$unicodeTemp / Highs ${temperatures.temperatureHigh}$unicodeTemp",
+                        fontSize = 12.sp
+                    )
                 }
             }
         }
@@ -203,11 +199,7 @@ fun ForecastPreview() {
         forecasts = getMockForecasts()
     )
     ScoutWeatherInterviewTheme {
-        ForecastContent(
-            forecast = mockForecast,
-            onToggled = {},
-            onNavigate = {}
-        )
+        ForecastContent(forecast = mockForecast, onToggled = {}, onNavigate = {})
     }
 }
 
