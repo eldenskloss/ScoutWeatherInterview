@@ -158,11 +158,10 @@ private fun ForecastRow(
 ) {
     val temperatures = forecast.getTemperatureFor(shouldShowInFahrenheit)
     val unicodeTemp = forecast.getTemperatureSign(shouldShowInFahrenheit)
-    Card(modifier = modifier.fillMaxWidth()) {
+    Card(modifier = modifier.fillMaxWidth().clickable { onNavigate(forecast.date) }) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .clickable { onNavigate(forecast.date) }
         ) {
             Text(text = forecast.day, fontWeight = FontWeight.Bold)
             Row(
