@@ -1,16 +1,15 @@
 package com.example.scoutweatherinterview.feature.weather.data.repository
 
+import com.example.scoutweatherinterview.BuildConfig
 import com.example.scoutweatherinterview.feature.weather.data.dto.ForecastResponseDTO
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface FetchForecastApi {
     companion object {
-        private const val KEY = "" // Your Key Here
-        private const val SUB_ROUTE = "v1/forecast.json"
-        private const val KEY_QUERY = "?key=$KEY"
+        private const val WEATHER_FORECAST_ROUTE = "v1/forecast.json"
     }
 
-    @GET("/$SUB_ROUTE$KEY_QUERY")
-    suspend fun fetchForecast(@Query("q") latLong: String, @Query("days") days: Int): ForecastResponseDTO
+    @GET("/$WEATHER_FORECAST_ROUTE")
+    suspend fun fetchForecast(@Query("key") apiKey: String = BuildConfig.WEAHTER_API_KEY, @Query("q") latLong: String, @Query("days") days: Int): ForecastResponseDTO
 }

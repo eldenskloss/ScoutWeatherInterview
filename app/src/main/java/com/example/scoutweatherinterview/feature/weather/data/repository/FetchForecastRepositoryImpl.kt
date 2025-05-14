@@ -17,7 +17,7 @@ class FetchForecastRepositoryImpl @Inject constructor(
     FetchForecastRepository {
     override suspend fun fetchForecast(lat: String, long: String): CommonResponse<Forecast> {
         return try {
-            val forecast = api.fetchForecast("$lat,$long", 7).toForecast()
+            val forecast = api.fetchForecast(latLong = "$lat,$long", days = 7).toForecast()
             CommonResponse.Success(forecast)
         } catch (e: HttpException) {
             logger.logError("HttpException on fetch forecast network call")
