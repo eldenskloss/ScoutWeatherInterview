@@ -1,4 +1,5 @@
 # Scout Weather Interview App
+- **Skip to bottom to see setup instructions** 
 
 ## Requirements
 - Create a weather app.
@@ -44,3 +45,27 @@
 - Include a **README** with:
     - Setup instructions.
     - Any assumptions made during development.
+
+
+
+## Instructions to setup the project
+
+### Prerequisites
+Ensure you have the following installed:
+
+- **Java Development Kit (JDK)**: Version 11 (required for `jvmTarget = "11"`).
+    - Download from [Oracle JDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) or use a package manager like `sdkman` (`sdk install java 11.0.21-open`).
+- **Android Studio**: Version 2024.1.1 (Koala) or later.
+    - Download from [Android Studio](https://developer.android.com/studio).
+- **Git**: For cloning the repository.
+    - Install via [Git](https://git-scm.com/) or your package manager.
+- **Internet Connection**: Required to download Gradle dependencies.
+
+## Setup Instructions
+1. **Clone the repository:**
+ - git clone https://github.com/eldenskloss/ScoutWeatherInterview.git
+ - cd scout-weather-interview
+2. **Open Project in Android Studio:**
+3. **Sync the project**
+4. **Start up emulator or plug in device**
+5. **Run Project**
