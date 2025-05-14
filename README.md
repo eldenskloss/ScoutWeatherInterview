@@ -65,10 +65,12 @@ Ensure you have the following installed:
 1. **Clone the repository:**
 - git clone https://github.com/eldenskloss/ScoutWeatherInterview.git
 - cd scout-weather-interview
-2. **Open Project in Android Studio:**
-3. **Sync the project**
-4. **Start up emulator or plug in device**
-5. **Run Project**
+2. **Create a "keystore.properties" file in your root directory
+- Add the following to your keystore.properties file: weatherApiKey="YOU_API_KEY_GOES_HERE"
+3. **Open Project in Android Studio:**
+4. **Sync the project**
+5. **Start up emulator or plug in device**
+6. **Run Project**
 
 
 ## Contribution Instructions
