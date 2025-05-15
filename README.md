@@ -72,16 +72,11 @@ Ensure you have the following installed:
 5. **Start up emulator or plug in device**
 6. **Run Project**
 
-
 ## Contribution Instructions
 1. **Ensure you have KTLINT installed**
 - brew install ktlint
 
-
-
 ## If I had more time
-1. Add API key to a keystore property (Left it in in place to make pulling repo easier)
-2. Re ask user for permission on screen if they clicked cancel
-3. Re try network call if network call fails
-4. Create a simple CI/CD to deploy
-5. Prompt user if GPS is disabled
+1. Re ask user for permission on screen if they clicked cancel on forecast details screen
+2. Create a simple CI/CD to deploy
+3. Prompt user if GPS is disabled
