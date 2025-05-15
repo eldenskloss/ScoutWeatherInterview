@@ -4,15 +4,18 @@ import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -52,6 +55,7 @@ fun SevenDayForecastScreen(
 ) {
     val isFahrenheitState = viewModel.isFahrenheitState.collectAsStateWithLifecycle(true).value
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val isMissingPermissions = viewModel.isMissingPermissions.collectAsStateWithLifecycle().value
     val locationPermissionState = rememberMultiplePermissionsState(
         listOf(
             ACCESS_FINE_LOCATION,
@@ -61,9 +65,8 @@ fun SevenDayForecastScreen(
     LaunchedEffect(locationPermissionState) {
         snapshotFlow { locationPermissionState.allPermissionsGranted }.collect {
             if (it) {
-                viewModel.fetchWeatherFromLocation()
+                viewModel.onAllPermissionsGranted()
             } else {
-                // TODO: Show user Location is required, try again screen
                 locationPermissionState.launchMultiplePermissionRequest()
             }
         }
@@ -71,24 +74,45 @@ fun SevenDayForecastScreen(
 
     Scaffold { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            when (uiState) {
-                is CommonUIState.Error -> {
-                    ErrorScreen(errorText = uiState.message)
-                }
-
-                CommonUIState.Loading -> {
-                    LoadingScreen()
-                }
-
-                is CommonUIState.Success -> {
-                    ForecastContent(
-                        forecast = uiState.result,
-                        onNavigate = onNavigate,
-                        shouldShowInFahrenheit = isFahrenheitState,
-                        onToggled = { isChecked ->
-                            viewModel.setIsFahrenheit(isChecked)
+            if (isMissingPermissions) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(modifier = Modifier.padding(24.dp), text = "Please enable location services to continue")
+                        Button(onClick = {
+                            locationPermissionState.launchMultiplePermissionRequest()
+                        }) {
+                            Text("Enable Locations")
                         }
-                    )
+                    }
+                }
+            } else {
+                when (uiState) {
+                    is CommonUIState.Error -> {
+                        ErrorScreen(errorText = uiState.message) {
+                            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                                Button(onClick = {
+                                    viewModel.fetchWeatherFromLocation()
+                                }) {
+                                    Text("Retry")
+                                }
+                            }
+                        }
+                    }
+
+                    CommonUIState.Loading -> {
+                        LoadingScreen()
+                    }
+
+                    is CommonUIState.Success -> {
+                        ForecastContent(
+                            forecast = uiState.result,
+                            onNavigate = onNavigate,
+                            shouldShowInFahrenheit = isFahrenheitState,
+                            onToggled = { isChecked ->
+                                viewModel.setIsFahrenheit(isChecked)
+                            }
+                        )
+                    }
                 }
             }
         }

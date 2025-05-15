@@ -25,6 +25,8 @@ open class SevenDayForecastViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<CommonUIState<Forecast>>(CommonUIState.Loading)
     val uiState = _uiState.asStateFlow()
     val isFahrenheitState = dataStoreManager.getIsFahrenheit()
+    private val _isMissingPermissions = MutableStateFlow(true)
+    val isMissingPermissions = _isMissingPermissions.asStateFlow()
 
     init {
         logger.onScreenViewed("SevenDayForecastScreen")
@@ -37,14 +39,20 @@ open class SevenDayForecastViewModel @Inject constructor(
         }
     }
 
+    fun onAllPermissionsGranted() {
+        _isMissingPermissions.value = false
+        fetchWeatherFromLocation()
+    }
+
     fun fetchWeatherFromLocation() {
         viewModelScope.launch {
             when (val locationResult = locationRepository.getUsersLocation()) {
                 LocationResult.Error -> {
                     _uiState.value = CommonUIState.Error("Unable to retrieve location")
+                    _isMissingPermissions.value = false
                 }
                 LocationResult.MissingPermission -> {
-                    // Ask for permission
+                    _isMissingPermissions.value = false
                 }
                 is LocationResult.Success -> {
                     collectStateForFetchingForecast(locationResult.location.lat, locationResult.location.long)
