@@ -77,6 +77,9 @@ Ensure you have the following installed:
 - brew install ktlint
 
 ## If I had more time
-1. Re ask user for permission on screen if they clicked cancel on forecast details screen
-2. Create a simple CI/CD to deploy
-3. Prompt user if GPS is disabled
+1. Re ask user for permission on forecast details screen if they clicked cancel or changed their settings
+2. Prompt user if GPS is disabled
+3. Add more unit tests for edge cases in TemperatureFormatter and SevenDayForecastViewModel.
+4. IF offline was a requirement: Cache forecasts with Room for offline access.
+5. Write UI tests with Espresso or Compose Testing.
+6. Create a simple CI/CD to run test on PR / mock deploy
