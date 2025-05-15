@@ -83,3 +83,4 @@ Ensure you have the following installed:
 4. IF offline was a requirement: Cache forecasts with Room for offline access.
 5. Write UI tests with Espresso or Compose Testing.
 6. Create a simple CI/CD to run test on PR / mock deploy
+7. Make UI more flexible to portrait mode, larger and smaller screen sizes. 
